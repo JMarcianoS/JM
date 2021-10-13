@@ -2,21 +2,26 @@
 #include <stdlib.h>
 #include <locale.h>
 #include <time.h>
+#include <ctype.h>
 
 //declaracao de funcoes
 void gerador();
+
+//variaveis globais
+char keyboard[BUFSIZ];
 
 
 int main()
 {
     setlocale(LC_ALL, "");
 
-    int inicio, i = 1, numIntervalo, numQuant;
+    int inicio, numIntervalo, numQuant;
+    char i = 'C';
 
     printf("\t\t\tGerador de números aleatórios!\n\n");
 
 
-    while(i == 1)
+    while(toupper(i) != 'S')
     {
         printf("Defina qual o primeiro número, onde deve iniciar o sorteio: \n");
         scanf("%d", &inicio);
@@ -32,8 +37,9 @@ int main()
         {
             printf("\nValor inicial inválido.\nDeve ser um valor maior que 0, não pode ser %d\n\n", inicio);
         }
-        printf("Desejar Continuar sorteando? Digite 1 para continuar ou 2 para sair: \n");
-        scanf("%d", &i);
+        printf("Desejar Continuar sorteando?\n Digite qualquer tecla para continuar ou S para sair: \n");
+        scanf("%c", &i);
+        setbuf(stdin,keyboard);//limpa buffer do teclado
 
     }
 
@@ -42,8 +48,10 @@ int main()
 
 void gerador(int ini, int intervalo, int quant)
 {
-    int i = 0, j, igual, limpaTela,contA, contB, aux;
+    int i = 0, j, igual, contA, contB, aux;
     int vetNum[quant];
+    char limpaTela = 'C';
+
     intervalo++;
     srand(time(NULL));
 
@@ -69,7 +77,6 @@ void gerador(int ini, int intervalo, int quant)
         while(i < quant);
 
         //ordenando números sorteados
-
         for(contA = 0; contA < quant ; contA++)
         {
             for(contB = contA + 1; contB < quant ; contB++)
@@ -91,11 +98,15 @@ void gerador(int ini, int intervalo, int quant)
             printf("%d ", vetNum[i] );
         }
 
-        printf("\n\nDeseja limpar a Tela?\n 1- Sim\n 2- Não \n");
-        scanf("%d", &limpaTela);
-        switch(limpaTela)
+        //Limpa tela
+        printf("\n\nDeseja limpar a Tela?\n S- Sim\n N- Não \n");
+        setbuf(stdin, keyboard);//limpa buffer do teclado
+        scanf("%c", &limpaTela);
+        setbuf(stdin, keyboard);//limpa buffer do teclado
+
+        switch(toupper(limpaTela))
         {
-            case 1:
+            case 'S':
                 system("clear");
                 break;
             default:
